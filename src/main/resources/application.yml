@@ -1,0 +1,17 @@
+quarkus:
+  application:
+    name: ${QUARKUS_APPLICATION_NAME:ms-customers}
+  shutdown:
+    timeout: 5
+  banner:
+    enabled: false
+  http:
+    port: ${QUARKUS_HTTP_PORT:8090}
+    root-path: /ms-customers/api
+    access-log:
+      enabled: true
+  log:
+    console:
+      enable: ${LOG_CONSOLE_ENABLE:true}
+      level: ${LOG_CONSOLE_LEVEL:INFO}
+      format: "%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n"

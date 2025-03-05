@@ -7,7 +7,8 @@ import java.util.Set;
 
 public interface CustomerRepository {
   Set<CustomerDomain> getAll(QueryParams queryParams);
-  void save(final CustomerDomain customer);
-  CustomerDomain findById(final CustomUUID customerId);
+  void save(CustomerDomain customer);
+  CustomerDomain findById(CustomUUID customerId);
+  void update(CustomUUID customerId, CustomerDomain customer);
 
 }

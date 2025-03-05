@@ -1,5 +1,9 @@
 package andrelsf.com.github.infra.repositories.models;
 
+import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
+
+import andrelsf.com.github.domain.entities.CustomerDomain;
 import andrelsf.com.github.domain.vo.CustomUUID;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
@@ -108,5 +112,40 @@ public class CustomerModel extends PanacheEntityBase {
 
   public String getIdentificationNumber() {
     return identificationNumber;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public void setCellPhone(String cellPhone) {
+    this.cellPhone = cellPhone;
+  }
+
+  public void setDateOfBirth(LocalDate dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  public void setIdentificationType(String identificationType) {
+    this.identificationType = identificationType;
+  }
+
+  public void setIdentificationNumber(String identificationNumber) {
+    this.identificationNumber = identificationNumber;
+  }
+
+  public void fillWith(final CustomerDomain customerDomain) {
+    setName(defaultIfBlank(customerDomain.getName(), this.getName()));
+    setEmail(defaultIfBlank(customerDomain.getEmail(), this.getEmail()));
+    setCellPhone(defaultIfBlank(customerDomain.getCellPhone(), this.getCellPhone()));
+    setDateOfBirth(defaultIfNull(customerDomain.getDateOfBirth(), this.getDateOfBirth()));
+    setIdentificationNumber(
+        defaultIfBlank(customerDomain.getIdentification().getNumber(), this.getIdentificationNumber()));
+    setIdentificationType(
+        defaultIfBlank(customerDomain.getIdentification().getType(), this.getIdentificationType()));
   }
 }

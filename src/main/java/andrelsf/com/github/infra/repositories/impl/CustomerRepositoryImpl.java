@@ -16,10 +16,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class CustomerRepositoryImpl implements CustomerRepository, PanacheRepository<CustomerModel> {
+public class CustomerRepositoryImpl implements CustomerRepository,
+    PanacheRepository<CustomerModel> {
 
   @Override
-  public Set<CustomerDomain> getAll(QueryParams params) {
+  public Set<CustomerDomain> getAll(final QueryParams params) {
     return this.findAll()
         .page(params.page(), params.size())
         .stream()
@@ -29,18 +30,31 @@ public class CustomerRepositoryImpl implements CustomerRepository, PanacheReposi
 
   @Override
   @Transactional
-  public void save(CustomerDomain customer) {
+  public void save(final CustomerDomain customer) {
     final CustomerModel customerModel = domainToModel(customer);
     this.persistAndFlush(customerModel);
   }
 
   @Override
-  public CustomerDomain findById(CustomUUID customerId) {
+  public CustomerDomain findById(final CustomUUID customerId) {
     return this.find("customerId", customerId.getValue())
         .singleResultOptional()
         .map(Mapper::modelToDomain)
         .orElseThrow(() ->
             new EntityNotFoundException(
                 "Customer not found by Id. ".concat(customerId.getValue())));
+  }
+
+  @Override
+  @Transactional
+  public void update(final CustomUUID customerId, final CustomerDomain customerDomain) {
+    this.find("customerId", customerId.getValue())
+        .singleResultOptional()
+        .ifPresentOrElse(customerModel -> {
+          customerModel.fillWith(customerDomain);
+          this.persistAndFlush(customerModel);
+        }, () -> {
+          throw new EntityNotFoundException("Customer not found by Id. ".concat(customerId.getValue()));
+        });
   }
 }

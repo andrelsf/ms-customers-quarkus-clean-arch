@@ -2,9 +2,9 @@ package andrelsf.com.github.domain.services.impl;
 
 import static java.lang.String.valueOf;
 
-import andrelsf.com.github.domain.services.IdentificationNumberService;
+import andrelsf.com.github.domain.services.IdentificationService;
 
-public class CpfValidator implements IdentificationNumberService {
+public class CpfValidator implements IdentificationService {
 
   private static final int[] WEIGHT = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
 

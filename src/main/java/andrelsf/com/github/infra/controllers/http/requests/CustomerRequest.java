@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-public record PostCustomerRequest(
+public record CustomerRequest(
     @NotEmpty String name,
     @NotEmpty @Email String email,
     @NotEmpty String cellPhone,

@@ -1,6 +1,6 @@
 package andrelsf.com.github.domain.services;
 
-public interface IdentificationNumberService {
+public interface IdentificationService {
 
   String ZERO_VALUE_REGEX = "^[0]+$";
   String CHARACTERES_CNPJ_REGEX = "[./-]";

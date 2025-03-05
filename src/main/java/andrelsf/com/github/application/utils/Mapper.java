@@ -1,7 +1,7 @@
 package andrelsf.com.github.application.utils;
 
 import andrelsf.com.github.domain.entities.CustomerDomain;
-import andrelsf.com.github.infra.controllers.http.requests.PostCustomerRequest;
+import andrelsf.com.github.infra.controllers.http.requests.CustomerRequest;
 import andrelsf.com.github.infra.controllers.http.responses.CustomerResponse;
 import andrelsf.com.github.infra.controllers.http.responses.IdentificationResponse;
 import andrelsf.com.github.infra.repositories.models.CustomerModel;
@@ -16,8 +16,8 @@ public interface Mapper {
         customerDomain.getCellPhone(),
         customerDomain.getDateOfBirth().toString(),
         new IdentificationResponse(
-            customerDomain.getIdentificationNumber().getType(),
-            customerDomain.getIdentificationNumber().number())
+            customerDomain.getIdentification().getType(),
+            customerDomain.getIdentification().getNumber())
     );
   }
 
@@ -39,11 +39,11 @@ public interface Mapper {
         customer.getEmail(),
         customer.getCellPhone(),
         customer.getDateOfBirth(),
-        customer.getIdentificationNumber().getType(),
-        customer.getIdentificationNumber().number());
+        customer.getIdentification().getType(),
+        customer.getIdentification().getNumber());
   }
 
-  static CustomerDomain requestToDomain(final PostCustomerRequest postRequest) {
+  static CustomerDomain requestToDomain(final CustomerRequest postRequest) {
     return CustomerDomain.create(
         postRequest.name(),
         postRequest.email(),

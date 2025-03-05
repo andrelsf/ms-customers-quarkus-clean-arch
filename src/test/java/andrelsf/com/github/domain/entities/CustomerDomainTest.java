@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import andrelsf.com.github.domain.vo.CustomUUID;
-import andrelsf.com.github.domain.vo.IdentificationNumber;
-import andrelsf.com.github.domain.vo.IdentificationNumberType;
+import andrelsf.com.github.domain.vo.Identification;
+import andrelsf.com.github.domain.vo.IdentificationType;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,7 @@ class CustomerDomainTest {
     final String cellPhone = "+5562911223344";
     final LocalDate dateOfBirth = LocalDate.of(1990, 1, 1);
     final String identificationNumber = "493.107.281-08";
-    final String identificationNumberType = IdentificationNumberType.CPF.name();
+    final String identificationNumberType = IdentificationType.CPF.name();
 
     final CustomerDomain customerDomain = assertDoesNotThrow(() ->
         new CustomerDomain(id, name, email, cellPhone, dateOfBirth, identificationNumber,
@@ -43,13 +43,13 @@ class CustomerDomainTest {
         .isNotNull()
         .isInstanceOf(LocalDate.class)
         .isEqualTo(dateOfBirth);
-    assertThat(customerDomain.getIdentificationNumber())
+    assertThat(customerDomain.getIdentification())
         .isNotNull()
-        .isInstanceOf(IdentificationNumber.class);
-    assertThat(customerDomain.getIdentificationNumber().getType())
+        .isInstanceOf(Identification.class);
+    assertThat(customerDomain.getIdentification().getType())
         .isNotBlank()
         .isEqualTo(identificationNumberType);
-    assertThat(customerDomain.getIdentificationNumber().number())
+    assertThat(customerDomain.getIdentification().getNumber())
         .isNotBlank()
         .isEqualTo(identificationNumber);
   }

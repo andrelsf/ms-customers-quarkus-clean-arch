@@ -5,33 +5,33 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import org.junit.jupiter.api.Test;
 
-class IdentificationNumberTest {
+class IdentificationTest {
 
   @Test
   void test_IdentificationNumber_CPFValid() {
     final String cpfValid = "71510309080";
 
     assertDoesNotThrow(() ->
-        new IdentificationNumber(IdentificationNumberType.CPF, cpfValid));
+        new Identification(IdentificationType.CPF, cpfValid));
   }
 
   @Test
   void test_IdentificationNumber_CNPJValid() {
     final String cnpjValid = "12.ABC.345/01DE-35";
 
-    assertDoesNotThrow(() -> new IdentificationNumber(IdentificationNumberType.CNPJ, cnpjValid));
+    assertDoesNotThrow(() -> new Identification(IdentificationType.CNPJ, cnpjValid));
   }
 
   @Test
   void test_IdentificationNumber_CNPJIsEmpty() {
-    assertThatThrownBy(() -> new IdentificationNumber(IdentificationNumberType.CNPJ, ""))
+    assertThatThrownBy(() -> new Identification(IdentificationType.CNPJ, ""))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Invalid length for CNPJ");
   }
 
   @Test
   void test_IdentificationNumber_CPFIsEmpty() {
-    assertThatThrownBy(() -> new IdentificationNumber(IdentificationNumberType.CPF, ""))
+    assertThatThrownBy(() -> new Identification(IdentificationType.CPF, ""))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Invalid length for CPF");
   }

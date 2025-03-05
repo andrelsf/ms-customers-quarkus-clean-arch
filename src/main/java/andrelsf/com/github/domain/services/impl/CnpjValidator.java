@@ -2,9 +2,9 @@ package andrelsf.com.github.domain.services.impl;
 
 import static java.lang.String.valueOf;
 
-import andrelsf.com.github.domain.services.IdentificationNumberService;
+import andrelsf.com.github.domain.services.IdentificationService;
 
-public class CnpjValidator implements IdentificationNumberService {
+public class CnpjValidator implements IdentificationService {
 
   private static final String FORMATTING_DV_REGEX = "[\\d]{2}";
   private static final String BASE_FORMATTING_CNPJ_REGEX = "[A-Z\\d]{12}";

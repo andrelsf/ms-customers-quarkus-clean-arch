@@ -1,0 +1,10 @@
+{
+  "name": "John Doe",
+  "email":  "john.doe@cybershopping.com",
+  "cellPhone": "+5562944332211",
+  "dateOfBirth": "1990-03-01",
+  "identification": {
+    "type": "CPF",
+    "number": "629.028.421-55"
+  }
+}

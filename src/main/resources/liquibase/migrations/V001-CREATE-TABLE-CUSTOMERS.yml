@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: V001
+      labels: "table_customers"
+      author: "andre.dev.linux@gmail.com"
+      comment: "Create table customers and index"
+      changes:
+        - tagDatabase:
+            tag: 1.0.0
+        - createTable:
+            tableName: customers
+            columns:
+              - column:
+                  name: customer_id
+                  type: VARCHAR(32)
+                  autoIncrement: false
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(180)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: cell_phone
+                  type: VARCHAR(18)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: date_of_birth
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: identification_type
+                  type: VARCHAR(12)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: identification_number
+                  type: VARCHAR(60)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: idx_customers
+            tableName: customers
+            columns:
+              - column:
+                  name: customer_id
+              - column:
+                  name: email
+              - column:
+                  name: cell_phone
+              - column:
+                  name: identification_number
+              - column:
+                  name: created_at

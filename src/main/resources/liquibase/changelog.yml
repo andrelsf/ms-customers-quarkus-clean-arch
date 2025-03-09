@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: liquibase/migrations/V001-CREATE-TABLE-CUSTOMERS.yml
+  - include:
+      file: liquibase/migrations/V002-ALTER-TABLE-CUSTOMERS-ADD-COLUMN-ACTIVE.yml

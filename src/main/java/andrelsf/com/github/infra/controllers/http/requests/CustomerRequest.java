@@ -10,7 +10,8 @@ public record CustomerRequest(
     @NotEmpty @Email String email,
     @NotEmpty String cellPhone,
     @NotNull LocalDate dateOfBirth,
-    @NotNull IdentificationRequest identification
+    @NotNull IdentificationRequest identification,
+    @NotNull boolean isActive
 ) {
 
 }

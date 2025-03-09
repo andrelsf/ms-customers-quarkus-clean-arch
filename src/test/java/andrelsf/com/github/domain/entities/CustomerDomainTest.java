@@ -22,8 +22,8 @@ class CustomerDomainTest {
     final String identificationNumberType = IdentificationType.CPF.name();
 
     final CustomerDomain customerDomain = assertDoesNotThrow(() ->
-        new CustomerDomain(id, name, email, cellPhone, dateOfBirth, identificationNumber,
-            identificationNumberType));
+        new CustomerDomain(
+            id, name, email, cellPhone, dateOfBirth, identificationNumber, identificationNumberType, Boolean.TRUE));
     assertThat(customerDomain)
         .isNotNull()
         .isInstanceOf(CustomerDomain.class);

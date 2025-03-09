@@ -16,8 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class CustomerRepositoryImpl implements CustomerRepository,
-    PanacheRepository<CustomerModel> {
+public class CustomerRepositoryImpl implements CustomerRepository, PanacheRepository<CustomerModel> {
 
   @Override
   public Set<CustomerDomain> getAll(final QueryParams params) {
@@ -33,6 +32,18 @@ public class CustomerRepositoryImpl implements CustomerRepository,
   public void save(final CustomerDomain customer) {
     final CustomerModel customerModel = domainToModel(customer);
     this.persistAndFlush(customerModel);
+  }
+
+  @Override
+  public void delete(CustomUUID customerId) {
+    this.find("customerId", customerId.getValue())
+        .singleResultOptional()
+        .ifPresentOrElse(customerModel -> {
+          customerModel.inactivate();
+          this.persistAndFlush(customerModel);
+        }, () -> {
+          throw new EntityNotFoundException("Customer not found by Id. ".concat(customerId.getValue()));
+        });
   }
 
   @Override

@@ -6,7 +6,8 @@ public record CustomerResponse(
     String email,
     String cellPhone,
     String dateOfBirth,
-    IdentificationResponse identification
+    IdentificationResponse identification,
+    boolean isActive
 ) {
 
 }

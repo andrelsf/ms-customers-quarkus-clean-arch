@@ -41,6 +41,9 @@ public class CustomerModel extends PanacheEntityBase {
   @Column(name = "identification_number", length = 60, nullable = false)
   private String identificationNumber;
 
+  @Column(name = "active", nullable = false)
+  private boolean isActive;
+
   @CreationTimestamp
   @Column(name = "created_at")
   private ZonedDateTime createdAt;
@@ -59,7 +62,8 @@ public class CustomerModel extends PanacheEntityBase {
       String cellPhone,
       LocalDate dateOfBirth,
       String identificationType,
-      String identificationNumber) {
+      String identificationNumber,
+      boolean isActive) {
     this.customerId = customerId;
     this.name = name;
     this.email = email;
@@ -67,6 +71,7 @@ public class CustomerModel extends PanacheEntityBase {
     this.dateOfBirth = dateOfBirth;
     this.identificationType = identificationType;
     this.identificationNumber = identificationNumber;
+    this.isActive = isActive;
   }
 
   public static CustomerModel create(
@@ -83,7 +88,8 @@ public class CustomerModel extends PanacheEntityBase {
         cellPhone,
         dateOfBirth,
         identificationType,
-        identificationNumber);
+        identificationNumber,
+        Boolean.TRUE);
   }
 
   public String getCustomerId() {
@@ -114,6 +120,10 @@ public class CustomerModel extends PanacheEntityBase {
     return identificationNumber;
   }
 
+  public boolean isActive() {
+    return this.isActive;
+  }
+
   public void setName(String name) {
     this.name = name;
   }
@@ -138,6 +148,18 @@ public class CustomerModel extends PanacheEntityBase {
     this.identificationNumber = identificationNumber;
   }
 
+  public void setActive(boolean isActive) {
+    this.isActive = isActive;
+  }
+
+  public boolean getActive() {
+    return this.isActive;
+  }
+
+  public void inactivate() {
+    this.isActive = false;
+  }
+
   public void fillWith(final CustomerDomain customerDomain) {
     setName(defaultIfBlank(customerDomain.getName(), this.getName()));
     setEmail(defaultIfBlank(customerDomain.getEmail(), this.getEmail()));
@@ -147,5 +169,6 @@ public class CustomerModel extends PanacheEntityBase {
         defaultIfBlank(customerDomain.getIdentification().getNumber(), this.getIdentificationNumber()));
     setIdentificationType(
         defaultIfBlank(customerDomain.getIdentification().getType(), this.getIdentificationType()));
+    setActive(defaultIfNull(customerDomain.isActive().getValue(), this.getActive()));
   }
 }

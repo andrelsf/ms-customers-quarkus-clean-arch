@@ -10,14 +10,15 @@ public interface Mapper {
 
   static CustomerResponse domainToResponse(final CustomerDomain customerDomain) {
     return new CustomerResponse(
-      customerDomain.getId(),
+        customerDomain.getId(),
         customerDomain.getName(),
         customerDomain.getEmail(),
         customerDomain.getCellPhone(),
         customerDomain.getDateOfBirth().toString(),
         new IdentificationResponse(
             customerDomain.getIdentification().getType(),
-            customerDomain.getIdentification().getNumber())
+            customerDomain.getIdentification().getNumber()),
+        customerDomain.isActive().getValue()
     );
   }
 
@@ -29,7 +30,8 @@ public interface Mapper {
         customerModel.getCellPhone(),
         customerModel.getDateOfBirth(),
         customerModel.getIdentificationNumber(),
-        customerModel.getIdentificationType());
+        customerModel.getIdentificationType(),
+        customerModel.isActive());
   }
 
   static CustomerModel domainToModel(final CustomerDomain customer) {
@@ -40,7 +42,8 @@ public interface Mapper {
         customer.getCellPhone(),
         customer.getDateOfBirth(),
         customer.getIdentification().getType(),
-        customer.getIdentification().getNumber());
+        customer.getIdentification().getNumber(),
+        customer.isActive().getValue());
   }
 
   static CustomerDomain requestToDomain(final CustomerRequest postRequest) {
@@ -50,6 +53,7 @@ public interface Mapper {
         postRequest.cellPhone(),
         postRequest.dateOfBirth(),
         postRequest.identification().number(),
-        postRequest.identification().type());
+        postRequest.identification().type(),
+        postRequest.isActive());
   }
 }

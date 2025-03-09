@@ -1,5 +1,6 @@
 package andrelsf.com.github.domain.entities;
 
+import andrelsf.com.github.domain.vo.Active;
 import andrelsf.com.github.domain.vo.CellPhone;
 import andrelsf.com.github.domain.vo.CustomUUID;
 import andrelsf.com.github.domain.vo.DateOfBirth;
@@ -17,6 +18,7 @@ public class CustomerDomain {
   private final CellPhone cellPhone;
   private final DateOfBirth dateOfBirth;
   private final Identification identification;
+  private final Active isActive;
 
   public CustomerDomain(
       String id,
@@ -25,7 +27,8 @@ public class CustomerDomain {
       String cellPhone,
       LocalDate dateOfBirth,
       String identificationNumber,
-      String identificationNumberType) {
+      String identificationNumberType,
+      boolean isActive) {
     this.id = new CustomUUID(id);
     this.name = new Name(name);
     this.email = new Email(email);
@@ -33,6 +36,7 @@ public class CustomerDomain {
     this.dateOfBirth = new DateOfBirth(dateOfBirth);
     this.identification = new Identification(
         IdentificationType.getTypeBy(identificationNumberType), identificationNumber);
+    this.isActive = new Active(isActive);
   }
 
   public static CustomerDomain create(
@@ -41,7 +45,8 @@ public class CustomerDomain {
       final String cellPhone,
       final LocalDate dateOfBirth,
       final String identificationNumber,
-      final String identificationNumberType
+      final String identificationNumberType,
+      final boolean isActive
   ) {
     return new CustomerDomain(
         CustomUUID.generate().getValue(),
@@ -50,7 +55,8 @@ public class CustomerDomain {
         cellPhone,
         dateOfBirth,
         identificationNumber,
-        identificationNumberType);
+        identificationNumberType,
+        isActive);
   }
 
   public String getId() {
@@ -75,5 +81,9 @@ public class CustomerDomain {
 
   public Identification getIdentification() {
     return this.identification;
+  }
+
+  public Active isActive() {
+    return this.isActive;
   }
 }

@@ -1,5 +1,6 @@
 package andrelsf.com.github.infra.controllers;
 
+import andrelsf.com.github.application.usecases.DeleteCustomer;
 import andrelsf.com.github.application.usecases.GetAllCustomers;
 import andrelsf.com.github.application.usecases.GetCustomer;
 import andrelsf.com.github.application.usecases.RegistryCustomer;
@@ -12,6 +13,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -31,6 +33,7 @@ import java.util.Set;
 public class CustomerController {
 
   @Inject GetCustomer getCustomer;
+  @Inject DeleteCustomer deleteCustomer;
   @Inject UpdateCustomer updateCustomer;
   @Inject GetAllCustomers getAllCustomers;
   @Inject RegistryCustomer registryCustomer;
@@ -63,6 +66,13 @@ public class CustomerController {
       @PathParam("customerId") @NotNull final CustomUUID customerId,
       @Valid final CustomerRequest customerRequest) {
     updateCustomer.execute(customerId, customerRequest);
+    return Response.noContent().build();
+  }
+
+  @DELETE
+  @Path("/{customerId}")
+  public Response deleteCustomer(@PathParam("customerId") @NotNull final CustomUUID customerId) {
+    deleteCustomer.execute(customerId);
     return Response.noContent().build();
   }
 }

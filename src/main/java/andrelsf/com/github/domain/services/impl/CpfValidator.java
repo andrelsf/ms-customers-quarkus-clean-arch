@@ -11,24 +11,19 @@ public class CpfValidator implements IdentificationService {
   @Override
   public void validate(final String value) {
     final String cpf = removeFormatting(value);
-
     if (cpf.length() != 11) {
       throw new IllegalArgumentException("Invalid length for CPF=".concat(cpf));
     }
-
     if (allEqual(cpf)) {
       throw new IllegalArgumentException("Invalid CPF all numbers are the same. ".concat(cpf));
     }
-
     final String cpfBase = getCpfBase(cpf);
-
     final int firstVerifierDigitProvided = getFirstVerifierDigits(cpf);
     final int firstVerifierDigitCalculated = calculateDigit(cpfBase);
     if (firstVerifierDigitProvided != firstVerifierDigitCalculated) {
       throw new IllegalArgumentException(
           "Invalid first verifier digit. dv=".concat(valueOf(firstVerifierDigitCalculated)));
     }
-
     final int secondVerifierDigitProvided = getSecondVerifierDigits(cpf);
     final int secondVerifierDigitCalculated = calculateDigit(cpfBase.concat(valueOf(firstVerifierDigitCalculated)));
     if (secondVerifierDigitCalculated != secondVerifierDigitProvided) {

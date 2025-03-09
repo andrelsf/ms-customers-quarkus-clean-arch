@@ -12,6 +12,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,10 +35,14 @@ public class CustomerRepositoryImpl implements CustomerRepository, PanacheReposi
     this.persistAndFlush(customerModel);
   }
 
+  private Optional<CustomerModel> getByCustomerId(final CustomUUID customerId) {
+    return this.find("customerId", customerId.getValue())
+        .singleResultOptional();
+  }
+
   @Override
   public void delete(CustomUUID customerId) {
-    this.find("customerId", customerId.getValue())
-        .singleResultOptional()
+    this.getByCustomerId(customerId)
         .ifPresentOrElse(customerModel -> {
           customerModel.inactivate();
           this.persistAndFlush(customerModel);
@@ -48,8 +53,7 @@ public class CustomerRepositoryImpl implements CustomerRepository, PanacheReposi
 
   @Override
   public CustomerDomain findById(final CustomUUID customerId) {
-    return this.find("customerId", customerId.getValue())
-        .singleResultOptional()
+    return this.getByCustomerId(customerId)
         .map(Mapper::modelToDomain)
         .orElseThrow(() ->
             new EntityNotFoundException(
@@ -59,8 +63,7 @@ public class CustomerRepositoryImpl implements CustomerRepository, PanacheReposi
   @Override
   @Transactional
   public void update(final CustomUUID customerId, final CustomerDomain customerDomain) {
-    this.find("customerId", customerId.getValue())
-        .singleResultOptional()
+    this.getByCustomerId(customerId)
         .ifPresentOrElse(customerModel -> {
           customerModel.fillWith(customerDomain);
           this.persistAndFlush(customerModel);

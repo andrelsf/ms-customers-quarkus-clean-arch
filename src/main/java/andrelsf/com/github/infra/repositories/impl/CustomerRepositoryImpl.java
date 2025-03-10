@@ -41,6 +41,7 @@ public class CustomerRepositoryImpl implements CustomerRepository, PanacheReposi
   }
 
   @Override
+  @Transactional
   public void delete(CustomUUID customerId) {
     this.getByCustomerId(customerId)
         .ifPresentOrElse(customerModel -> {

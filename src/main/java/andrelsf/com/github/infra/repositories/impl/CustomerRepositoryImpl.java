@@ -2,6 +2,7 @@ package andrelsf.com.github.infra.repositories.impl;
 
 import static andrelsf.com.github.application.utils.Mapper.domainToModel;
 
+import andrelsf.com.github.application.handlers.exceptions.CustomerException.DuplicateKeyException;
 import andrelsf.com.github.application.utils.Mapper;
 import andrelsf.com.github.domain.entities.CustomerDomain;
 import andrelsf.com.github.domain.vo.CustomUUID;
@@ -33,8 +34,16 @@ public class CustomerRepositoryImpl implements CustomerRepository, PanacheReposi
   @Override
   @Transactional
   public void save(final CustomerDomain customer) {
-    final CustomerModel customerModel = domainToModel(customer);
-    this.persistAndFlush(customerModel);
+    final String identificationNumber = customer.getIdentification().getNumber();
+    this.find("identificationNumber", identificationNumber)
+        .singleResultOptional()
+        .ifPresentOrElse(customerModel -> {
+          throw new DuplicateKeyException(
+              "Duplicate key already exists identification number. ".concat(identificationNumber));
+        }, () -> {
+          final CustomerModel customerModel = domainToModel(customer);
+          this.persistAndFlush(customerModel);
+        });
   }
 
   private Optional<CustomerModel> getByCustomerId(final CustomUUID customerId) {

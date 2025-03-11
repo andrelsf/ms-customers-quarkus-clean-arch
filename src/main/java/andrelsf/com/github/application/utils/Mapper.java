@@ -5,6 +5,7 @@ import andrelsf.com.github.infra.controllers.http.requests.CustomerRequest;
 import andrelsf.com.github.infra.controllers.http.responses.CustomerResponse;
 import andrelsf.com.github.infra.controllers.http.responses.IdentificationResponse;
 import andrelsf.com.github.infra.repositories.models.CustomerModel;
+import io.vertx.core.json.JsonObject;
 
 public interface Mapper {
 
@@ -55,5 +56,11 @@ public interface Mapper {
         postRequest.identification().number(),
         postRequest.identification().type(),
         postRequest.isActive());
+  }
+
+  static JsonObject buildApiError(final int statusCode, final String message) {
+    return new JsonObject()
+        .put("code", statusCode)
+        .put("message", message);
   }
 }

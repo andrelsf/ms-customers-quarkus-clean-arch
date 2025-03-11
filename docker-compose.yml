@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  cybershopping-psql:
+    image: postgres:15-alpine3.21
+    container_name: "cybershopping-psql"
+    hostname: cyber-psql-server
+    labels:
+      br.dev.multicode.author: "Andre Ferreira <andre.dev.linux@gmail.com>"
+      br.dev.multicode.license: "MIT"
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: cyber
+      POSTGRES_PASSWORD: cyb3rS3cr3t
+      POSTGRES_DB: cybershopping

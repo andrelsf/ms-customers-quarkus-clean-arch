@@ -1,5 +1,6 @@
 package andrelsf.com.github.domain.services.impl;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import org.assertj.core.api.Assertions;
@@ -26,7 +27,7 @@ class CpfValidatorTest {
   @Test
   void test_CpfValidator_invalidLength() {
     final String invalidCpf = "1112223334";
-    Assertions.assertThatThrownBy(() -> new CpfValidator().validate(invalidCpf))
+    assertThatThrownBy(() -> new CpfValidator().validate(invalidCpf))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Invalid length for CPF=".concat(invalidCpf));
   }
@@ -34,7 +35,7 @@ class CpfValidatorTest {
   @Test
   void test_CpfValidator_invalid_allEqual() {
     final String invalidCpf = "11111111111";
-    Assertions.assertThatThrownBy(() -> new CpfValidator().validate(invalidCpf))
+    assertThatThrownBy(() -> new CpfValidator().validate(invalidCpf))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Invalid CPF all numbers are the same. ".concat(invalidCpf));
   }
@@ -42,7 +43,7 @@ class CpfValidatorTest {
   @Test
   void test_CpfValidator_invalid_firstVerifierDigit() {
     final String invalidCpf = "71510309090";
-    Assertions.assertThatThrownBy(() -> new CpfValidator().validate(invalidCpf))
+    assertThatThrownBy(() -> new CpfValidator().validate(invalidCpf))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Invalid first verifier digit.");
   }
@@ -50,7 +51,7 @@ class CpfValidatorTest {
   @Test
   void test_CpfValidator_invalid_secondVerifierDigit() {
     final String invalidCpf = "71510309081";
-    Assertions.assertThatThrownBy(() -> new CpfValidator().validate(invalidCpf))
+    assertThatThrownBy(() -> new CpfValidator().validate(invalidCpf))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Invalid second verifier digit.");
   }

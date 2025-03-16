@@ -1,0 +1,29 @@
+quarkus:
+  application:
+    name: ${QUARKUS_APPLICATION_NAME:ms-customers}
+  shutdown:
+    timeout: 5
+  banner:
+    enabled: false
+  http:
+    port: ${QUARKUS_HTTP_PORT:8090}
+    root-path: /ms-customers/api
+    access-log:
+      enabled: true
+  datasource:
+    db-kind: ${QUARKUS_DATASOURCE_KIND:postgresql}
+    jdbc:
+      url: ${QUARKUS_DATASOURCE_JDBC_URL:jdbc:postgresql://localhost:5432/cybershopping}
+    username: ${QUARKUS_DATASOURCE_USERNAME:cyber}
+    password: ${QUARKUS_DATASOURCE_PASSWORD:cyb3rS3cr3t}
+  hibernate-orm:
+    database:
+      generation: none
+  liquibase:
+    migrate-at-start: false
+    change-log: "liquibase/changelog.yml"
+  log:
+    console:
+      enable: ${LOG_CONSOLE_ENABLE:true}
+      level: ${LOG_CONSOLE_LEVEL:INFO}
+      format: "%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n"

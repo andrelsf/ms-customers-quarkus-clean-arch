@@ -7,7 +7,7 @@ public class Address {
 
   public Address(String value) {
     if (value.isBlank()) {
-      throw new IllegalArgumentException("Invalid address. ".concat(value));
+      throw new IllegalArgumentException("Invalid address");
     }
     this.value = value;
   }

@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class CustomerRepositoryImpl implements CustomerRepository, PanacheRepository<CustomerModel> {
 
-  private static final String NOT_FOUND_MESSAGE = "Customer not found by Id. ";
-
   @Override
   public Set<CustomerDomain> getAll(final QueryParams params) {
     return this.findAll()
@@ -56,7 +54,7 @@ public class CustomerRepositoryImpl implements CustomerRepository, PanacheReposi
     return this.getByCustomerId(customerId)
         .map(Mapper::modelToDomain)
         .orElseThrow(() ->
-            new EntityNotFoundException(NOT_FOUND_MESSAGE.concat(customerId.getValue())));
+            buildEntityNotFoundException(customerId.getValue()));
   }
 
   @Override
@@ -67,7 +65,7 @@ public class CustomerRepositoryImpl implements CustomerRepository, PanacheReposi
           customerModel.fillWith(customerDomain);
           this.persistAndFlush(customerModel);
         }, () -> {
-          throw new EntityNotFoundException(NOT_FOUND_MESSAGE.concat(customerId.getValue()));
+          throw buildEntityNotFoundException(customerId.getValue());
         });
   }
 
@@ -79,7 +77,11 @@ public class CustomerRepositoryImpl implements CustomerRepository, PanacheReposi
           customerModel.inactivate();
           this.persistAndFlush(customerModel);
         }, () -> {
-          throw new EntityNotFoundException(NOT_FOUND_MESSAGE.concat(customerId.getValue()));
+          throw buildEntityNotFoundException(customerId.getValue());
         });
+  }
+
+  private EntityNotFoundException buildEntityNotFoundException(final String customerId) {
+    return new EntityNotFoundException("Customer not found by Id. ".concat(customerId));
   }
 }

@@ -29,7 +29,6 @@ class CustomerRepositoryImplTest {
   private CustomerDomain johnDoe;
   private CustomerDomain janeDoe;
   private CustomerDomain joseNomeFacil;
-  private Set<CustomerDomain> allCustomers;
 
   @BeforeEach
   void setUp() {
@@ -78,7 +77,7 @@ class CustomerRepositoryImplTest {
     final Set<CustomerDomain> customers = customerRepository.getAll(queryParams);
     assertThat(customers)
         .isNotEmpty()
-        .hasSize(2);
+        .hasSize(3);
   }
 
   @Test
@@ -113,5 +112,95 @@ class CustomerRepositoryImplTest {
         .isNotBlank();
     assertThat(customerDomain.getName())
         .isNotBlank();
+  }
+
+  @Test
+  @Order(6)
+  void test_update_success() {
+    final CustomerDomain bobDoe = new CustomerDomain(
+        CustomUUID.generate().getValue(),
+        "Bob Doe",
+        "bob.doe@test.com",
+        "+5562900112233",
+        LocalDate.of(1990, 2, 15),
+        "461.358.050-10",
+        IdentificationType.CPF.name(),
+        Boolean.TRUE);
+    assertDoesNotThrow(() ->
+        customerRepository.save(bobDoe));
+    final CustomUUID customerId = new CustomUUID(bobDoe.getId());
+    CustomerDomain joseNomeFacilUpdate = new CustomerDomain(
+        bobDoe.getId(),
+        "BOB DOE",
+        "jose.facil@gmail.com",
+        "+5562900112233",
+        LocalDate.of(1990, 12, 1),
+        "461.358.050-10",
+        IdentificationType.CPF.name(),
+        Boolean.FALSE);
+
+    assertDoesNotThrow(() ->
+        customerRepository.update(customerId, joseNomeFacilUpdate));
+    final CustomerDomain customerDomainUpdated = customerRepository.findById(customerId);
+    assertThat(customerDomainUpdated)
+        .isNotNull()
+        .isInstanceOf(CustomerDomain.class);
+    assertThat(customerDomainUpdated.getId())
+        .isNotBlank()
+        .isEqualTo(customerId.getValue());
+    assertThat(customerDomainUpdated.getEmail())
+        .isNotBlank()
+        .isNotEqualTo(bobDoe.getEmail());
+    assertThat(customerDomainUpdated.getDateOfBirth())
+        .isNotNull()
+        .isNotEqualTo(bobDoe.getDateOfBirth());
+    assertThat(customerDomainUpdated.isActive().getValue())
+        .isEqualTo(Boolean.FALSE);
+  }
+
+  @Test
+  @Order(8)
+  void test_update_fail() {
+    final String customerIdAsString = CustomUUID.generate().getValue();
+    final CustomUUID customerId = new CustomUUID(customerIdAsString);
+    assertThatThrownBy(() -> customerRepository.update(customerId, joseNomeFacil))
+        .isInstanceOf(EntityNotFoundException.class)
+        .hasMessage("Customer not found by Id. ".concat(customerIdAsString));
+  }
+
+  @Test
+  @Order(9)
+  void test_delete_success() {
+    final CustomerDomain aliceDoe = new CustomerDomain(
+        CustomUUID.generate().getValue(),
+        "Alice Doe",
+        "alice.doe@test.com",
+        "+5562900112299",
+        LocalDate.of(1995, 7, 1),
+        "373.932.460-07",
+        IdentificationType.CPF.name(),
+        Boolean.TRUE);
+    assertDoesNotThrow(() -> customerRepository.save(aliceDoe));
+    final CustomUUID customerId = new CustomUUID(aliceDoe.getId());
+    assertDoesNotThrow(() -> customerRepository.delete(customerId));
+    final CustomerDomain customerDomainUpdated = customerRepository.findById(customerId);
+    assertThat(customerDomainUpdated)
+        .isNotNull()
+        .isInstanceOf(CustomerDomain.class);
+    assertThat(customerDomainUpdated.getId())
+        .isNotBlank()
+        .isEqualTo(customerId.getValue());
+    assertThat(customerDomainUpdated.isActive().getValue())
+        .isEqualTo(Boolean.FALSE);
+  }
+
+  @Test
+  @Order(10)
+  void test_delete_fail() {
+    final String customerIdAsString = CustomUUID.generate().getValue();
+    final CustomUUID customerId = new CustomUUID(customerIdAsString);
+    assertThatThrownBy(() -> customerRepository.delete(customerId))
+        .isInstanceOf(EntityNotFoundException.class)
+        .hasMessage("Customer not found by Id. ".concat(customerIdAsString));
   }
 }

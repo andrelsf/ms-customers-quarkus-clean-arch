@@ -30,7 +30,7 @@ public class AddressDomain {
       String zipCode) {
     this.id = new CustomUUID(id);
     this.customerId = new CustomUUID(customerId);
-    this.type = new AddressType(type);
+    this.type = AddressType.getType(type);
     this.address = new Address(address);
     this.city = new City(city);
     this.state = new State(state);
@@ -65,8 +65,8 @@ public class AddressDomain {
     return this.customerId.getValue();
   }
 
-  public String getType() {
-    return this.type.getValue();
+  public AddressType getType() {
+    return this.type;
   }
 
   public String getAddress() {

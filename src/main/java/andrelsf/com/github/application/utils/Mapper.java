@@ -1,9 +1,14 @@
 package andrelsf.com.github.application.utils;
 
+import andrelsf.com.github.domain.entities.AddressDomain;
 import andrelsf.com.github.domain.entities.CustomerDomain;
+import andrelsf.com.github.domain.vo.CustomUUID;
+import andrelsf.com.github.infra.controllers.http.requests.AddressRequest;
 import andrelsf.com.github.infra.controllers.http.requests.CustomerRequest;
+import andrelsf.com.github.infra.controllers.http.responses.AddressResponse;
 import andrelsf.com.github.infra.controllers.http.responses.CustomerResponse;
 import andrelsf.com.github.infra.controllers.http.responses.IdentificationResponse;
+import andrelsf.com.github.infra.repositories.models.AddressModel;
 import andrelsf.com.github.infra.repositories.models.CustomerModel;
 import io.vertx.core.json.JsonObject;
 
@@ -62,5 +67,53 @@ public interface Mapper {
     return new JsonObject()
         .put("code", statusCode)
         .put("message", message);
+  }
+
+  static AddressDomain addressModelToDomain(final AddressModel addressModel) {
+    return new AddressDomain(
+        addressModel.getId(),
+        addressModel.getCustomerId(),
+        addressModel.getType().name(),
+        addressModel.getAddress(),
+        addressModel.getCity(),
+        addressModel.getState(),
+        addressModel.getCountry(),
+        addressModel.getZipCode());
+  }
+
+  static AddressResponse addressDomainToResponse(final AddressDomain addressDomain) {
+    return new AddressResponse(
+        addressDomain.getId(),
+        addressDomain.getCustomerId(),
+        addressDomain.getType().name(),
+        addressDomain.getAddress(),
+        addressDomain.getCity(),
+        addressDomain.getState(),
+        addressDomain.getCountry(),
+        addressDomain.getZipCode());
+  }
+
+  static AddressDomain addressRequestToDomain(
+      final CustomUUID customerId,
+      final AddressRequest addressRequest) {
+    return AddressDomain.create(
+        customerId.getValue(),
+        addressRequest.type(),
+        addressRequest.address(),
+        addressRequest.city(),
+        addressRequest.state(),
+        addressRequest.country(),
+        addressRequest.zipCode());
+  }
+
+  static AddressModel addressDomainToModel(final AddressDomain addressDomain) {
+    return AddressModel.create(
+        addressDomain.getCustomerId(),
+        addressDomain.getType(),
+        addressDomain.getAddress(),
+        addressDomain.getCity(),
+        addressDomain.getState(),
+        addressDomain.getCountry(),
+        addressDomain.getZipCode());
   }
 }

@@ -1,17 +1,14 @@
 package andrelsf.com.github.domain.vo;
 
-public class AddressType {
+import java.util.Arrays;
 
-  public final String value;
+public enum AddressType {
+  RESIDENTIAL, OFFICE, OTHER;
 
-  public AddressType(String value) {
-    if (value.isBlank()) {
-      throw new IllegalArgumentException("Invalid address type. ".concat(value));
-    }
-    this.value = value;
-  }
-
-  public String getValue() {
-    return this.value;
+  public static AddressType getType(final String value) {
+    return Arrays.stream(AddressType.values())
+        .filter(addressType -> addressType.name().equalsIgnoreCase(value))
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException("Invalid address type"));
   }
 }

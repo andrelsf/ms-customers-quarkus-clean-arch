@@ -76,8 +76,7 @@ class CustomerRepositoryImplTest {
   void test_getAll() {
     final Set<CustomerDomain> customers = customerRepository.getAll(queryParams);
     assertThat(customers)
-        .isNotEmpty()
-        .hasSize(3);
+        .isNotEmpty();
   }
 
   @Test

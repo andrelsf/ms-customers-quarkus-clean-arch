@@ -1,24 +1,32 @@
 package andrelsf.com.github.infra.controllers;
 
+import static andrelsf.com.github.application.utils.Mapper.addressDomainToResponse;
+import static andrelsf.com.github.application.utils.Mapper.addressRequestToDomain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import andrelsf.com.github.application.usecases.DeleteCustomer;
+import andrelsf.com.github.application.usecases.GetAddresses;
 import andrelsf.com.github.application.usecases.GetAllCustomers;
 import andrelsf.com.github.application.usecases.GetCustomer;
+import andrelsf.com.github.application.usecases.RegistryAddress;
 import andrelsf.com.github.application.usecases.RegistryCustomer;
 import andrelsf.com.github.application.usecases.UpdateCustomer;
 import andrelsf.com.github.application.utils.Mapper;
+import andrelsf.com.github.domain.entities.AddressDomain;
 import andrelsf.com.github.domain.entities.CustomerDomain;
 import andrelsf.com.github.domain.vo.CustomUUID;
 import andrelsf.com.github.domain.vo.IdentificationType;
 import andrelsf.com.github.infra.controllers.http.queries.QueryParams;
+import andrelsf.com.github.infra.controllers.http.requests.AddressRequest;
 import andrelsf.com.github.infra.controllers.http.requests.CustomerRequest;
 import andrelsf.com.github.infra.controllers.http.requests.IdentificationRequest;
+import andrelsf.com.github.infra.controllers.http.responses.AddressResponse;
 import andrelsf.com.github.infra.controllers.http.responses.CustomerResponse;
 import andrelsf.com.github.infra.controllers.http.responses.IdentificationResponse;
 import io.quarkus.test.InjectMock;
@@ -26,6 +34,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import org.jboss.resteasy.reactive.RestResponse.StatusCode;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +53,10 @@ class CustomerControllerTest {
   GetAllCustomers getAllCustomers;
   @InjectMock
   RegistryCustomer registryCustomer;
+  @InjectMock
+  RegistryAddress registryAddress;
+  @InjectMock
+  GetAddresses getAddresses;
 
   @Inject
   CustomerController customerController;
@@ -187,5 +200,57 @@ class CustomerControllerTest {
     assertThat(response.getEntity())
         .isNull();
     verify(deleteCustomer, times(1)).execute(customerId);
+  }
+
+  @Test
+  void test_postAddress_success() {
+    final CustomUUID customerId = CustomUUID.generate();
+    final AddressRequest addressRequest = buildAddressRequest();
+    when(registryAddress.execute(customerId, addressRequest))
+        .thenReturn(CustomUUID.generate());
+
+    final Response response = customerController.postAddress(customerId, addressRequest);
+
+    assertThat(response)
+        .isNotNull()
+        .isInstanceOf(Response.class);
+    assertThat(response.getStatus())
+        .isEqualTo(StatusCode.CREATED);
+    assertThat(response.getEntity())
+        .isNull();
+  }
+
+  @Test
+  void test_getAddresses_success() {
+    final CustomUUID customerId = CustomUUID.generate();
+    final AddressRequest addressRequest = buildAddressRequest();
+    final AddressDomain addresses = addressRequestToDomain(customerId, addressRequest);
+    when(getAddresses.execute(customerId))
+        .thenReturn(Set.of(addressDomainToResponse(addresses)));
+
+    final Response response = customerController.getAddresses(customerId);
+
+    assertThat(response)
+        .isNotNull()
+        .isInstanceOf(Response.class);
+    assertThat(response.getStatus())
+        .isEqualTo(StatusCode.OK);
+    assertThat(response.getEntity())
+        .isNotNull()
+        .isInstanceOf(Set.class);
+    final Set<AddressResponse> addressEntitiesResponse = (Set<AddressResponse>) response.getEntity();
+    assertThat(addressEntitiesResponse)
+        .isNotEmpty()
+        .hasSize(1);
+  }
+
+  private AddressRequest buildAddressRequest() {
+    return new AddressRequest(
+        "RESIDENTIAL",
+        "Street test",
+        "Test",
+        "TS",
+        "Brazil",
+        "79045300");
   }
 }

@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: V003
+      labels: "table_addresses"
+      author: "andre.dev.linux@gmail.com"
+      comment: "Create table addresses and index"
+      changes:
+        - tagDatabase:
+            tag: 1.1.0
+        - createTable:
+            tableName: addresses
+            columns:
+              - column:
+                  name: address_id
+                  type: VARCHAR(32)
+                  autoIncrement: false
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(11)
+                  remarks: "RESIDENTIAL, OFFICE OR OTHER"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: city
+                  type: VARCHAR(60)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: state
+                  type: VARCHAR(120)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country
+                  type: VARCHAR(120)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: zip_code
+                  type: VARCHAR(60)
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: idx_address
+            tableName: addresses
+            columns:
+              - column:
+                  name: address_id
+              - column:
+                  name: customer_id
+              - column:
+                  name: address

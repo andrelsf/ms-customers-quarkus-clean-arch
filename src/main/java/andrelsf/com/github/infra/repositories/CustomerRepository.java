@@ -6,7 +6,6 @@ import andrelsf.com.github.infra.controllers.http.queries.QueryParams;
 import java.util.Set;
 
 public interface CustomerRepository {
-
   void save(CustomerDomain customer);
   void delete(CustomUUID customerId);
   CustomerDomain findById(CustomUUID customerId);

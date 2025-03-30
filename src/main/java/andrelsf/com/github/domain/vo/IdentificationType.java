@@ -23,6 +23,6 @@ public enum IdentificationType {
     return Arrays.stream(IdentificationType.values())
         .filter(identificationNumberType -> identificationNumberType.name().equalsIgnoreCase(value))
         .findFirst()
-        .orElseThrow(() -> new RuntimeException("Invalid Identification type."));
+        .orElseThrow(() -> new IllegalArgumentException("Invalid Identification type."));
   }
 }
